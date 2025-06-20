@@ -21,6 +21,8 @@
                 Start chatting now!
             </div>
         </ul>
+
+        <div id="typing"></div>
         <form action="" id="form">
             <input type="text" name="" id="input" autocomplete="off" placeholder="Type your message here..." />
             <button>Send</button>
@@ -31,10 +33,11 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
     let mySocketId = '';
-    const socket = io();
+    const socket = io();   // kết nối đến server socket.io
     const form = document.getElementById('form')  //lấy toàn bộ phần tử HTML có id="form"
     const input = document.getElementById('input') // lấy toàn bộ phần tử HTML có id="input"
     const message = document.getElementById('message');
+    let typing = false
 
      socket.on('connect',()=>{
         mySocketId = socket.id // lưu ID của socket khi kết nối thành công
@@ -47,7 +50,55 @@
             input.value = ''
         }
     });
+
+    input.addEventListener('input',()=>{
+        if(!typing) {
+            typing = true; // đánh dấu là đang gõ
+            socket.emit('typing',true); // gửi sự kiện 'typing' khi người dùng bắt đầu gõ
+        }
+        clearTimeout(input.typingTimeout); // xóa timeout trước đó nếu có
+        input.typingTimeout = setTimeout(()=>{
+            typing = false;
+            socket.emit('typing',false);
+        },2000); // đặt timeout để gửi sự kiện 'typing' sau 500ms nếu không có hoạt động gõ tiếp theo
+       
+    })
     
+    socket.on('typing',(username)=>{
+       
+           
+            if(!typing.querySelector('.typing-indicator')){
+                const indicator = document.createElement('div')
+                indicator.className = 'typing-indicator';
+
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent =  `${username} is typing...`
+                
+                const dot1 = document.createElement('div');
+                const dot2 = document.createElement('div');
+                const dot3 = document.createElement('div');
+
+                dot1.className  = dot2.className = dot3.className = 'typing-dot';
+
+                indicator.appendChild(nameSpan);
+                indicator.appendChild(dot1);
+                indicator.appendChild(dot2);
+                indicator.appendChild(dot3);
+
+                typing.appendChild(indicator); // thêm phần tử indicator vào phần tử typing
+            }
+            
+        
+    })
+
+    socket.on('stop-typing',(username)=>{
+        const typing = document.getElementById('typing');
+        const indicator = typing.querySelector('.typing-indicator');
+        if(indicator){
+            indicator.remove(); // xóa phần tử indicator khi người dùng không còn gõ nữa
+        }
+    })
+
 
     socket.on('chat message',function(msg){
 
