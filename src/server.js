@@ -6,8 +6,8 @@ const socketHandler = require('./socketHandler');
 
 app.use(express.static('public'));
 
-io.on('connection', (socket) =>{
-    socketHandler(socket, io)
+io.on('connection', (socket) =>{  // khi có người dùng mới kết nối, sẽ gọi hàm socketHandler
+    socketHandler(socket, io) 
 })
 
 const port = process.env.PORT || 3000;
