@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realtime chat</title>
+    <link rel="stylesheet" href="./style/index.css">
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>
+                💬 Realtime Chat
+                 <span class="status-indicator"></span>
+            </h1>
+        </div>
+
+        <ul id="message">
+            <div class="empty-state">
+                Start chatting now!
+            </div>
+        </ul>
+        <form action="" id="form">
+            <input type="text" name="" id="input" autocomplete="off">
+            <button>Send</button>
+        </form>
+    </div>
+</body>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    let mySocketId = '';
+    const socket = io();
+    const form = document.getElementById('form')  //lấy toàn bộ phần tử HTML có id="form"
+    const input = document.getElementById('input') // lấy toàn bộ phần tử HTML có id="input"
+    const message = document.getElementById('message');
+
+     socket.on('connect',()=>{
+        mySocketId = socket.id // lưu ID của socket khi kết nối thành công
+    })
+
+    form.addEventListener('submit', function(e){
+        e.preventDefault(); // ngăn load lại form
+        if(input.value){
+            socket.emit('chat message', input.value);
+            input.value = ''
+        }
+    });
+
+    socket.on('chat message',function(msg){
+       
+        const item = document.createElement('li') // tạo phần tử li
+
+        const isMine = msg.senderId === mySocketId; // kiểm tra xem tin nhắn có phải của người dùng hiện tại không
+        item.classList.add(isMine ? 'message-right' : 'message-left');
+
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble' + isMine ? 'mine' : '';
+        bubble.innerHTML = `<strong>${msg.user}</strong> <br><small> [${msg.time}]</small> <br>${msg.text}`;
+        
+        item.appendChild(bubble); 
+
+        message.appendChild(item);
+        message.scrollTop = message.scrollHeight; // cuộn xuống cuối cùng
+
+    })
+</script>
+</html>
