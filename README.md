@@ -31,14 +31,17 @@ A simple real-time chat application built with **Node.js**, **Socket.io**, and *
 ```bash
 git clone https://github.com/your-username/realtime-chat-app.git
 cd realtime-chat-app
+```
 
 ### 2. Install dependencies
 ```bash
 npm install
+```
 
 ### 3. Run the app
 ```bash
 npm run start
+```
 
 ### 4. Start Ngrok (optional)
 ```bash
