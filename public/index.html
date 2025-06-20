@@ -60,13 +60,13 @@
         input.typingTimeout = setTimeout(()=>{
             typing = false;
             socket.emit('typing',false);
-        },2000); // đặt timeout để gửi sự kiện 'typing' sau 500ms nếu không có hoạt động gõ tiếp theo
+        },1000); // đặt timeout để gửi sự kiện 'typing' sau 500ms nếu không có hoạt động gõ tiếp theo
        
     })
     
     socket.on('typing',(username)=>{
        
-           
+            const typing = document.getElementById('typing');
             if(!typing.querySelector('.typing-indicator')){
                 const indicator = document.createElement('div')
                 indicator.className = 'typing-indicator';
