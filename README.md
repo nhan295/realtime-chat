@@ -32,15 +32,15 @@ A simple real-time chat application built with **Node.js**, **Socket.io**, and *
 git clone https://github.com/your-username/realtime-chat-app.git
 cd realtime-chat-app
 
-**### 2. Install dependencies**
+### 2. Install dependencies
 ```bash
 npm install
 
-**### 3. Run the app**
+### 3. Run the app
 ```bash
 npm run start
 
-**### 4. Start Ngrok (optional) **
+### 4. Start Ngrok (optional)
 ```bash
 ngrok http 3000
 
