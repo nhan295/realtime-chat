@@ -22,7 +22,7 @@
             </div>
         </ul>
         <form action="" id="form">
-            <input type="text" name="" id="input" autocomplete="off">
+            <input type="text" name="" id="input" autocomplete="off" placeholder="Type your message here..." />
             <button>Send</button>
         </form>
     </div>
@@ -47,8 +47,26 @@
             input.value = ''
         }
     });
+    
 
     socket.on('chat message',function(msg){
+
+        function removeEmptyState() {
+            const emptyState = message.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+        }
+        removeEmptyState(); // xóa trạng thái rỗng nếu có
+
+        function formatTime() {
+            const now = new Date();
+            return now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+        }
+        msg.time = formatTime(); // định dạng thời gian gửi tin nhắn
        
         const item = document.createElement('li') // tạo phần tử li
 
@@ -56,11 +74,31 @@
         item.classList.add(isMine ? 'message-right' : 'message-left');
 
         const bubble = document.createElement('div');
-        bubble.className = 'bubble' + isMine ? 'mine' : '';
-        bubble.innerHTML = `<strong>${msg.user}</strong> <br><small> [${msg.time}]</small> <br>${msg.text}`;
+        bubble.className = 'bubble';
         
-        item.appendChild(bubble); 
+        const messageHeader = document.createElement('div');
+        messageHeader.className = 'message-header';
 
+        const username = document.createElement('span');
+        username.className = 'username';
+        username.textContent = msg.user; // hiển thị tên người dùng
+
+        const timestamp = document.createElement('span');
+        timestamp.className = 'timestamp'
+        timestamp.textContent = msg.time; // hiển thị thời gian gửi tin nhắn
+
+        messageHeader.appendChild(username);
+        messageHeader.appendChild(timestamp);
+
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        messageContent.textContent = msg.text;
+
+
+        bubble.appendChild(messageHeader);
+        bubble.appendChild(messageContent)
+
+        item.appendChild(bubble);
         message.appendChild(item);
         message.scrollTop = message.scrollHeight; // cuộn xuống cuối cùng
 
