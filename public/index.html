@@ -31,9 +31,16 @@
 </body>
 
 <script src="/socket.io/socket.io.js"></script>
+
+ <script>
+    // Lưu lại io gốc vào biến khác trước khi Putter ghi đè
+    window.LocalSocketIO = window.io;
+</script>
+
+<script src="https://js.puter.com/v2/"></script>
 <script>
     let mySocketId = '';
-    const socket = io();   // kết nối đến server socket.io
+    const socket = LocalSocketIO();   // kết nối đến server socket.io
     const form = document.getElementById('form')  //lấy toàn bộ phần tử HTML có id="form"
     const input = document.getElementById('input') // lấy toàn bộ phần tử HTML có id="input"
     const message = document.getElementById('message');
@@ -60,7 +67,7 @@
         input.typingTimeout = setTimeout(()=>{
             typing = false;
             socket.emit('typing',false);
-        },1000); // đặt timeout để gửi sự kiện 'typing' sau 500ms nếu không có hoạt động gõ tiếp theo
+        },1000); // đặt timeout để gửi sự kiện 'typing' sau 1000ms nếu không có hoạt động gõ tiếp theo
        
     })
     
@@ -99,7 +106,29 @@
         }
     })
 
-
+    async function translateText(text, targetLanguage){
+        try{
+            const messages = [
+                 {
+                        role: 'system',
+                        content: `You are a helpful assistant that translates all input to ${targetLanguage}. Reply ONLY with the translated text.`
+                    },
+                    {
+                        role: 'user',
+                        content: text
+                    }
+            ]
+            console.log('text:', text);
+            console.log('targetLanguage:', targetLanguage);
+            const res = await puter.ai.chat(messages)
+            return res.message?.content || 'Translation not available'
+            
+        }catch(err){
+            console.error('Error translating text:', err);
+             
+            return 'Translation failed';
+        }
+    } 
     socket.on('chat message',function(msg){
 
         function removeEmptyState() {
@@ -145,9 +174,35 @@
         messageContent.className = 'message-content';
         messageContent.textContent = msg.text;
 
+        const translateWrapper = document.createElement('div');
+        translateWrapper.className = 'translate-wrapper'
+
+        const option = document.createElement('select');
+        option.className = 'language-opt';
+        option.innerHTML = `
+        <option value = "" disabled selected>Translate to...</option>
+        <option value="vi">vi</option>
+        <option value="en">en</option>
+        <option value="zh">zh</option>
+        `;
+
+        option.addEventListener('change', async()=>{
+            const targetLang = option.value;
+            const translated = await translateText( msg.text, targetLang)
+
+            const translatedText = document.createElement('div');
+            translatedText.className = 'translated-text';
+            translatedText.textContent = translated;
+
+            bubble.appendChild(translatedText)
+        })
 
         bubble.appendChild(messageHeader);
         bubble.appendChild(messageContent)
+        bubble.appendChild(translateWrapper)
+        bubble.appendChild(option);
+    
+   
 
         item.appendChild(bubble);
         message.appendChild(item);
