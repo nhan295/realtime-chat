@@ -13,7 +13,7 @@ A simple real-time chat application built with **Node.js**, **Socket.io**, and *
 - 📐 **Message Alignment**: Your messages appear on the right, others' on the left  
 - 📱 **Responsive UI**: Clean and mobile-friendly chat interface  
 - 🌐 **Ngrok Integration**: Easily share your local server with others for testing
-- 🌍 Message Translation: Automatically translate incoming messages to your preferred language
+- 🌍 Message Translation: On-demand Translation: Select a language to translate any message when you need it
 
 ---
 
