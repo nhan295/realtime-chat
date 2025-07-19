@@ -1,4 +1,4 @@
-const formatMessage = require("./utils/formatMessage");
+const formatMessage = require("./src/utils/formatMessage");
 
 module.exports = (socket,io) =>{   //  được gọi mỗi khi có người mới truy cập vào app (1 user = 1 socket)
      console.log('A user connected')

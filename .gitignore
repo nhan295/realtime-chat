@@ -1,4 +1,4 @@
-/node_modules
+/server/node_modules
 /coverage
 public/index.html
 public/style/index.css
