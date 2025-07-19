@@ -14,7 +14,11 @@ A simple real-time chat application built with **Node.js**, **Socket.io**, and *
 - 📱 **Responsive UI**: Clean and mobile-friendly chat interface  
 - 🌐 **Ngrok Integration**: Easily share your local server with others for testing
 - 🌍 Message Translation: On-demand Translation: Select a language to translate any message when you need it
-
+  
+I also implemented a CI/CD pipeline using GitHub Actions and Docker Hub:
+- Dockerized both the client and server
+- Automatically builds and pushes Docker image of the server to Docker Hub on every push to main 
+- Used GitHub Secrets to securely log in to Docker Hub
 ---
 
 ## 🛠️ Technologies Used
