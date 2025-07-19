@@ -6,7 +6,7 @@ RUN npm install
 
 # copy toàn bộ client + server
 COPY  server ./server
-COPY client/public ./client/public 
+COPY client ./client
 
 WORKDIR /app/server
 
