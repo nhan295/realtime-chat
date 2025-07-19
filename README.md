@@ -1,4 +1,4 @@
-![Thumbnail](https://raw.githubusercontent.com/nhan295/realtime-chat/main/public/assets/thumbnail.png)
+![Thumbnail](https://raw.githubusercontent.com/nhan295/realtime-chat/main/client/public/assets/thumbnail.png)
 # 💬 Realtime Chat Application
 
 A simple real-time chat application built with **Node.js**, **Socket.io**, and **Vanilla JavaScript** to demonstrate the power of **WebSockets** and live client-server communication.
